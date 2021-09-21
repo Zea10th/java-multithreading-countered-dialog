@@ -5,6 +5,7 @@ import java.util.concurrent.Callable;
 class LocalThread implements Callable<String> {
     private final int PAUSE = 2500;
     private final String NAME;
+    private boolean isInterrupted = Thread.currentThread().isInterrupted();
     private int counter = 0;
 
     LocalThread(String name) {
@@ -13,11 +14,10 @@ class LocalThread implements Callable<String> {
 
     @Override
     public String call() {
-
         try {
-            while (!Thread.interrupted()) {
-                Thread.sleep((int) (PAUSE * Math.random()));
+            while (!isInterrupted) {
                 System.out.printf("%s is greeting you!\n", this.NAME);
+                Thread.sleep((int) (PAUSE * Math.random()));
                 this.counter++;
             }
         } catch (InterruptedException err) {
